@@ -13,7 +13,7 @@ import falcon_jsonify
 falcon.API(middleware=[falcon_jsonify.Middleware(help_messages=True)])
 ```
 
-## Get Started
+## Getting Started
 
 
 ### Responses
@@ -27,7 +27,7 @@ resp.json = {"my_field": "Hello World"}
 ```python
 value = req.get_json('my_field')  # required field
 ```
-* Response `400 Bad Request` is returned if the field does not exist in the request body.
+* Response `400 Bad Request` is returned if field does not exist in the request body.
 * Full deserialized dict can be accesed at `req.json` *(without validations)*, e.g. `req.json['my_field']`.
 
 
@@ -41,7 +41,7 @@ req.get_json('age', dtype=int, min=18, max=99)  # min/max numeric value
 req.get_json('amount', dtype=float, min=0.0)
 req.get_json('approved', dtype=bool)
 ```
-* Response `400 Bad Request` is returned if any validation fail.
+* Response `400 Bad Request` is returned if a validation fails.
 
 ### Additional parameters ###
 
@@ -60,7 +60,8 @@ req.get_json('email', match="[^@]+@[^@]+\.[^@]+")
 Example:
 
 ```javascript
-400 Bad Request
+HTTP/1.1 400 Bad Request
+
 {
   "title": "Validation error",
   "description": "Minimum value for 'age' is '18'"
