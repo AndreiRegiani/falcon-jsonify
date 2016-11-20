@@ -1,8 +1,9 @@
 from setuptools import setup, find_packages
 
+import pypandoc
+
 
 classifiers = [
-    'Framework :: Falcon',
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',
     'Operating System :: OS Independent',
@@ -19,10 +20,10 @@ setup(
     author='Andrei Regiani',
     author_email='andrei.cpp@gmail.com',
     url='https://github.com/AndreiRegiani/falcon-jsonify',
-    version='0.1',
+    version='0.1.1',
     classifiers=classifiers,
     description='Falcon middleware to serialize/deserialize JSON with built-in input validation',
-    long_description=open('README.md').read(),
+    long_description = pypandoc.convert('README.md', 'rst'),
     keywords='falcon json jsonify validation validator middleware',
     packages=find_packages(include=('falcon_json*',)),
     install_requires=open('requirements.txt').read(),
