@@ -2,8 +2,8 @@
 
  [Falcon](https://github.com/falconry/falcon) middleware to serialize/deserialize JSON with built-in input validation.
 
-```
-pip install falcon-jsonify
+```shell
+$ pip install falcon-jsonify
 ```
 
 Add the middleware into your project:
