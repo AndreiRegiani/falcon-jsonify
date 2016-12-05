@@ -7,17 +7,28 @@ import falcon
 class Middleware(object):
 
     def __init__(self, help_messages=True):
+        """
+        help_messages: display validation/error messages in the response in
+                       case of bad requests
+        """
         self.debug = bool(help_messages)
 
 
     def bad_request(self, title, description):
+        """
+        Responds with 400 Bad Request
+        """
         if self.debug:
             raise falcon.HTTPBadRequest(title, description)
         else:
             raise falcon.HTTPBadRequest()
 
 
-    def get_json(self, field, dtype=None, min=None, max=None, default=None, match=None):
+    def get_json(self, field, **validators):
+        """
+        Helper to access JSON fields in the request body
+        Optional built-in validators
+        """
         value = None
 
         if default:
@@ -29,7 +40,19 @@ class Middleware(object):
         else:
             value = self.req.json[field]
 
-        # built-in validations
+        return validate(value, **validators)
+
+
+    def validate(self, value, dtype=None, default=None, min=None, max=None, match=None):
+        """
+        JSON field validators:
+
+        dtype      data type
+        default    value used if field is not provided in the request body
+        min        minimum length (str) or value (int, float)
+        max        maximum length (str) or value (int, float)
+        match      regular expression
+        """
         err_title = "Validation error"
 
         if dtype:
@@ -67,13 +90,16 @@ class Middleware(object):
 
 
     def process_request(self, req, resp):
+        """
+        Middleware request
+        """
         if not req.content_length:
             return
 
         body = req.stream.read()
         req.json = {}
         self.req = req
-        req.get_json = self.get_json
+        req.get_json = self.get_json  # helper function
 
         try:
             req.json = json.loads(body.decode('utf-8'))
@@ -86,6 +112,9 @@ class Middleware(object):
 
 
     def process_response(self, req, resp, resource, req_succeeded):
+        """
+        Middleware response
+        """
         try:
             resp.data = json.dumps(resp.json)
         except AttributeError:
