@@ -116,6 +116,6 @@ class Middleware(object):
         Middleware response
         """
         try:
-            resp.data = json.dumps(resp.json)
+            resp.body = json.dumps(resp.json)
         except AttributeError:
             pass
