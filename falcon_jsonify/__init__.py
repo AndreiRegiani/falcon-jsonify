@@ -115,5 +115,6 @@ class Middleware(object):
         """
         Middleware response
         """
-        resp.body = str.encode(json.dumps(resp.json))
+        if getattr(resp, "json", None):
+            resp.body = str.encode(json.dumps(resp.json))
 
