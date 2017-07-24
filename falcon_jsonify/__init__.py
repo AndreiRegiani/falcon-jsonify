@@ -1,7 +1,19 @@
+from datetime import datetime
 import json
 import re
 import six
 import falcon
+
+
+
+
+
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.isoformat()
+
+        return json.JSONEncoder.default(self, o)
 
 
 class Middleware(object):
@@ -116,5 +128,5 @@ class Middleware(object):
         Middleware response
         """
         if getattr(resp, "json", None):
-            resp.body = str.encode(json.dumps(resp.json))
+            resp.body = str.encode(json.dumps(resp.json, cls=DateTimeEncoder))
 
