@@ -1,5 +1,5 @@
 # falcon-jsonify
- [Falcon](https://github.com/falconry/falcon) middleware to serialize/deserialize JSON, includes optional request validators. (Python 3 and 2)
+ [Falcon](https://github.com/falconry/falcon) middleware to serialize/deserialize JSON. (Python 3 and 2)
 
 ```shell
 $ pip install falcon-jsonify
@@ -9,10 +9,9 @@ Add middleware to your app:
 
 ```python
 import falcon_jsonify
-
 falcon.API(middleware=[falcon_jsonify.Middleware(help_messages=True)])
 ```
-To disable error/validation messages set `help_messages=False`.
+To disable error messages set `help_messages=False`.
 
 ## Getting Started
 See [example usage](https://github.com/AndreiRegiani/falcon-mongo-template/blob/master/src/resources/example.py).
