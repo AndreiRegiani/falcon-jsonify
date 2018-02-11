@@ -38,9 +38,9 @@ class Middleware(object):
                              "Field '{}' is required".format(field))
         else:
             value = self.req.json[field]
-        return self.validate(value, **validators)
+        return self.validate(field, value, **validators)
 
-    def validate(self, value, dtype=None, default=None, min=None, max=None, match=None):
+    def validate(self, field, value, dtype=None, default=None, min=None, max=None, match=None):
         """JSON field validators:
 
         dtype      data type
@@ -93,10 +93,10 @@ class Middleware(object):
         req.get_json = self.get_json  # helper function
         try:
             req.json = json.loads(body.decode('utf-8'))
-        except ValueError:
-            self.bad_request("Malformed JSON", "Syntax error")
         except UnicodeDecodeError:
             self.bad_request("Invalid encoding", "Could not decode as UTF-8")
+        except ValueError:
+            self.bad_request("Malformed JSON", "Syntax error")
 
     def process_response(self, req, resp, resource, req_succeeded):
         """Middleware response"""
