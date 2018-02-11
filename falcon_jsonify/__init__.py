@@ -1,7 +1,19 @@
+from datetime import datetime
 import json
 import re
-
+import six
 import falcon
+
+
+
+
+
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.isoformat()
+
+        return json.JSONEncoder.default(self, o)
 
 
 class Middleware(object):
@@ -24,7 +36,7 @@ class Middleware(object):
             raise falcon.HTTPBadRequest()
 
 
-    def get_json(self, field, **validators):
+    def get_json(self, field, default=None, **validators):
         """
         Helper to access JSON fields in the request body
         Optional built-in validators
@@ -40,7 +52,7 @@ class Middleware(object):
         else:
             value = self.req.json[field]
 
-        return validate(value, **validators)
+        return self.validate(value, **validators)
 
 
     def validate(self, value, dtype=None, default=None, min=None, max=None, match=None):
@@ -56,7 +68,7 @@ class Middleware(object):
         err_title = "Validation error"
 
         if dtype:
-            if dtype == str and type(value) == unicode:
+            if dtype == str and type(value) == six.string_types:
                 pass
 
             elif type(value) is not dtype:
@@ -64,7 +76,7 @@ class Middleware(object):
                 self.bad_request(err_title,
                                  msg.format(field, type(value).__name__,  dtype.__name__))
 
-        if type(value) == unicode:
+        if type(value) == six.string_types:
             if min and len(value) < min:
                 self.bad_request(err_title,
                                  "Minimum length for '{}' is '{}'".format(field, min))
@@ -115,7 +127,6 @@ class Middleware(object):
         """
         Middleware response
         """
-        try:
-            resp.body = json.dumps(resp.json)
-        except AttributeError:
-            pass
+        if getattr(resp, "json", None):
+            resp.body = str.encode(json.dumps(resp.json, cls=DateTimeEncoder))
+
