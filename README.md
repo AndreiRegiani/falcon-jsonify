@@ -15,6 +15,7 @@ falcon.API(middleware=[falcon_jsonify.Middleware(help_messages=True)])
 To disable error/validation messages set `help_messages=False`.
 
 ## Getting Started
+See [example usage](https://github.com/AndreiRegiani/falcon-mongo-template/blob/master/src/resources/example.py).
 
 ### Responses
 ```python
@@ -25,7 +26,7 @@ resp.json = {"my_field": "Hello World"}
 ```python
 value = req.get_json('my_field')  # required field
 ```
-* Response `400 Bad Request` is returned if field does not exist in the request body.
+* Raises response `400 Bad Request` if field does not exist in the request body (JSON).
 * Full deserialized dict can be accesed at `req.json` *(without validations)*, e.g. `req.json['my_field']`.
 
 
@@ -38,10 +39,10 @@ req.get_json('age', dtype=int, min=18, max=99)  # min/max numeric value
 req.get_json('amount', dtype=float, min=0.0)
 req.get_json('approved', dtype=bool)
 ```
-* Response `400 Bad Request` is returned if a validation fails containing the error message.
+* Raises response `400 Bad Request` with error message if any validation fails.
 
 ### Additional parameters ###
-* `default`, `match`
+* `default`, `match` (regex)
 
 ```python
 # make a field optional with default value
@@ -52,9 +53,8 @@ req.get_json('email', match="[^@]+@[^@]+\.[^@]+")
 ```
 
 ### Error responses
-
+Status code: 400 Bad Request
 ```javascript
-400 Bad Request
 {
   "title": "Validation error",
   "description": "Minimum value for 'age' is '18'"
