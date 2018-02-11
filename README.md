@@ -9,7 +9,10 @@ Add middleware to your app:
 
 ```python
 import falcon_jsonify
-falcon.API(middleware=[falcon_jsonify.Middleware(help_messages=True)])
+
+api = falcon.API(middleware=[
+    falcon_jsonify.Middleware(help_messages=True),
+])
 ```
 To disable error messages set `help_messages=False`.
 
