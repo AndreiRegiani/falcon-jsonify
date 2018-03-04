@@ -40,7 +40,7 @@ class Middleware(object):
             value = self.req.json[field]
         return self.validate(field, value, **validators)
 
-    def validate(self, field, value, dtype=None, default=None, min=None, max=None, match=None):
+    def validate(self, field, value, dtype=None, default=None, min=None, max=None, match=None, choices=None):
         """JSON field validators:
 
         dtype      data type
@@ -48,6 +48,7 @@ class Middleware(object):
         min        minimum length (str) or value (int, float)
         max        maximum length (str) or value (int, float)
         match      regular expression
+        choices    list to which the value should be limited
         """
         err_title = "Validation error"
 
@@ -81,6 +82,10 @@ class Middleware(object):
         if match and not re.match(match, re.escape(value)):
             self.bad_request(err_title,
                              "'{}' does not match Regex: {}".format(field, match))
+
+        if choices and value not in choices:
+            self.bad_request(err_title,
+                             "{} must be one of {}".format(field, choices))
         return value
 
     def process_request(self, req, resp):
