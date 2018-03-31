@@ -25,19 +25,19 @@ class Middleware(object):
         else:
             raise falcon.HTTPBadRequest()
 
-    def get_json(self, field, default=None, **validators):
+    def get_json(self, field, required=True, default=None, **validators):
         """Helper to access JSON fields in the request body
 
         Optional built-in validators.
         """
         value = None
-        if default:
-            value = default
-        elif not field in self.req.json:
+        if field in self.req.json:
+            value = self.req.json[field]
+        elif required and not default:
             self.bad_request("Missing JSON field",
                              "Field '{}' is required".format(field))
         else:
-            value = self.req.json[field]
+            value = default
         return self.validate(field, value, **validators)
 
     def validate(self, field, value, dtype=None, default=None, min=None, max=None, match=None, choices=None):

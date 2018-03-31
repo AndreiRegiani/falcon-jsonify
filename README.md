@@ -50,6 +50,9 @@ req.get_json('approved', dtype=bool)
 # make a field optional with default value
 req.get_json('country_code', dtype=str, default="USA", max=3, min=3)
 
+# for ambiguous falsy default value, set required=False
+req.get_json('count', dtype=int, default=0, required=False)
+
 # custom validation with Regular Expressions
 req.get_json('email', match="[^@]+@[^@]+\.[^@]+")
 ```
