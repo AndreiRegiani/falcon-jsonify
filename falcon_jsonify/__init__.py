@@ -107,5 +107,5 @@ class Middleware(object):
 
     def process_response(self, req, resp, resource, req_succeeded):
         """Middleware response"""
-        if getattr(resp, "json", None):
+        if getattr(resp, "json", None) is not None:
             resp.body = str.encode(json.dumps(resp.json, cls=DateTimeEncoder))
