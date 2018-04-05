@@ -20,7 +20,7 @@ setup(
     author='Andrei Regiani',
     author_email='andrei.cpp@gmail.com',
     url='https://github.com/AndreiRegiani/falcon-jsonify',
-    version='1.1',
+    version='1.2',
     classifiers=classifiers,
     description='Falcon middleware to serialize/deserialize JSON with built-in input validation',
     # long_description = pypandoc.convert('README.md', 'rst'),
