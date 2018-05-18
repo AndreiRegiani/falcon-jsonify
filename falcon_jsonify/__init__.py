@@ -55,7 +55,7 @@ class Middleware(object):
         err_title = "Validation error"
 
         if dtype:
-            if dtype == str and type(value) == six.string_types:
+            if dtype == str and type(value) in six.string_types:
                 pass
 
             elif type(value) is not dtype:
@@ -63,7 +63,7 @@ class Middleware(object):
                 self.bad_request(err_title,
                                  msg.format(field, type(value).__name__,  dtype.__name__))
 
-        if type(value) == six.string_types:
+        if type(value) in six.string_types:
             if min and len(value) < min:
                 self.bad_request(err_title,
                                  "Minimum length for '{}' is '{}'".format(field, min))
