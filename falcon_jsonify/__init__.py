@@ -94,7 +94,7 @@ class Middleware(object):
         """Middleware request"""
         if not req.content_length:
             return
-        body = req.stream.read()
+        body = req.stream.read(req.content_length or 0)
         req.json = {}
         self.req = req
         req.get_json = self.get_json  # helper function
